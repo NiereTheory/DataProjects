@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>CPU Real-time Monitoring</h1>
+
+    <div id="cpu">
+
+    </div>
+</body>
+<script>
+    document.querySelector('#cpu').innerHTML += `Stream started`;
+    var eventSource = new EventSource('http://127.0.0.1:5000/stream');
+    console.log('Trying to connect to server-events');
+
+    eventSource.addEventListener('open', (o) => {
+        console.log('Connection opened');
+    }, false);
+
+    eventSource.onmessage = (msg) => {
+        console.log('message received');
+        let percent = JSON.parse(msg.data);
+        percentToDisplay = percent.cpu_percent_use;
+        let newP = document.createElement('p');
+        newP.innerHTML = percentToDisplay;
+        document.querySelector('#cpu').appendChild(newP);
+    };
+</script>
+
+</html>
