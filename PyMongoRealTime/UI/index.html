@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Streaming!!!</title>
+</head>
+<style>
+    #Toyota {
+        color: gold;
+    }
+
+    #Mercedes {
+        color: black;
+    }
+
+    #BMW {
+        color: blue;
+    }
+
+    #Tesla {
+        color: red;
+    }
+
+    #Audi {
+        color: silver;
+    }
+</style>
+
+<body>
+    <h1>Streaming Car Servicing</h1>
+
+    <div class="container">
+        <h3 class="container__section">Toyota: <span id="Toyota"></span>
+        </h3>
+        <h3 class="container__section">Mercedes: <span id="Mercedes"></span>
+        </h3>
+        <h3 class="container__section">BMW: <span id="BMW"></span>
+        </h3>
+        <h3 class="container__section">Tesla: <span id="Tesla"></span>
+        </h3>
+        <h3 class="container__section">Audi: <span id="Audi"></span>
+        </h3>
+    </div>
+</body>
+<script>
+    carCounter = {
+        Toyota: 0,
+        Mercedes: 0,
+        BMW: 0,
+        Tesla: 0,
+        Audi: 0
+    }
+
+    var eventSource = new EventSource('http://127.0.0.1:3000/data/stream');
+
+    eventSource.onopen = (open) => {
+        console.log(open);
+        console.log('Connection opened!'), false;
+    }
+
+    eventSource.addEventListener('insert', (msg) => {
+        console.log(msg.data);
+        carCounter[msg.data] = carCounter[msg.data] + 1;
+        document.querySelector(`#${msg.data}`).innerHTML = carCounter[msg.data];
+    });
+</script>
+
+</html>
